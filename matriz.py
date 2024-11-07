@@ -107,5 +107,57 @@ def multiplicarMatriz(Matriz1, Matriz2):
 
     return matrizResultado
 
+def calcularMatrizReducida(Matriz, i, j):
+    
+    filas = len(Matriz)
+    columnas = len(Matriz[0])
+    
+    if (i > filas or j > columnas):
+        print(f"Index out")
+        return []
+    
+    if (filas == 1 and columnas == 1):
+        return Matriz[0][0]
+    
+    matrizResultado = []
+    
+    matrizTemporal = Matriz
+    
+    # Borra la columna j
+    for fila in range(filas):
+        matrizTemporal[fila].pop(j)
+    
+    # Borra la fila i
+    matrizTemporal.pop(i)
+    
+    matrizResultado = matrizTemporal
+    
+    return matrizResultado
+
+def calcularDeterminanteMatriz(Matriz):
+    filas = len(Matriz)
+    columnas = len(Matriz[0])
+    
+    if (filas != columnas):
+        print(f"Esta matriz no tiene determinante")
+        return 0
+    
+    determinante = 0
+    
+    for fila in range(filas):
+        for columna in range(columnas):
+            determinante += (-1)**((fila+columna+2))*calcularMatrizReducida(Matriz, fila, columna)
+    
+    return determinante
+
 if __name__ == "__main__":
     print(f"Libreria creada en 2024\nRicardo Sánchez")
+    
+    A = generarMatriz(4, 2, 4, 2, 2)
+    
+    imprimirMatriz(A)
+    
+    print(f"{calcularDeterminanteMatriz(A)}")
+    
+    
+    
