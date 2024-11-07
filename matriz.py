@@ -108,29 +108,28 @@ def multiplicarMatriz(Matriz1, Matriz2):
     return matrizResultado
 
 def calcularMatrizReducida(Matriz, i, j):
-    
-    filas = len(Matriz)
-    columnas = len(Matriz[0])
-    
-    if (i > filas or j > columnas):
-        print(f"Index out")
-        return []
-    
-    if (filas == 1 and columnas == 1):
-        return Matriz[0][0]
-    
     matrizResultado = []
     
-    matrizTemporal = Matriz
+    filas = len(Matriz)
     
-    # Borra la columna j
+    # Recorrer todas las filas de la matriz original
     for fila in range(filas):
-        matrizTemporal[fila].pop(j)
-    
-    # Borra la fila i
-    matrizTemporal.pop(i)
-    
-    matrizResultado = matrizTemporal
+        # Omitir la fila i
+        if fila == i:
+            continue
+        
+        # Crear una nueva fila para la matriz reducida
+        filaResultado = []
+        
+        # Recorrer todas las columnas de la matriz original
+        for columna in range(len(Matriz[fila])):
+            # Omitir la columna j
+            if columna == j:
+                continue
+            filaResultado.append(Matriz[fila][columna])
+        
+        # Añadir la nueva fila a la matriz reducida
+        matrizResultado.append(filaResultado)
     
     return matrizResultado
 
@@ -141,23 +140,30 @@ def calcularDeterminanteMatriz(Matriz):
     if (filas != columnas):
         print(f"Esta matriz no tiene determinante")
         return 0
+                
+    if filas==1:
+        return Matriz[0][0]
+    if filas ==2:
+        return Matriz[0][0] * Matriz[1][1] - Matriz[0][1] * Matriz[1][0]
     
+    # Para matrices de orden n, con n>2
     determinante = 0
-    
-    for fila in range(filas):
-        for columna in range(columnas):
-            determinante += (-1)**((fila+columna+2))*calcularMatrizReducida(Matriz, fila, columna)
-    
+        
+    # Expansión por cofactores
+    for columna in range(columnas):
+        # Calcular la matriz reducida eliminando la primera fila y la columna 'columna'
+        subMatriz = calcularMatrizReducida(Matriz, 0, columna)
+            
+        # Calcular el determinante de la submatriz recursivamente y acumularlo
+        determinante += ((-1) ** columna)*Matriz[0][columna]*calcularDeterminanteMatriz(subMatriz)
+                
     return determinante
+
+# Queda definir una funcion para invertir una matriz si es posible
 
 if __name__ == "__main__":
     print(f"Libreria creada en 2024\nRicardo Sánchez")
     
-    A = generarMatriz(4, 2, 4, 2, 2)
-    
-    imprimirMatriz(A)
-    
-    print(f"{calcularDeterminanteMatriz(A)}")
     
     
     
